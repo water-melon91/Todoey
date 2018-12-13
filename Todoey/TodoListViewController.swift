@@ -9,14 +9,20 @@
 import UIKit
 
 class TodoListViewController: UITableViewController {
-
-    var itemArray = ["Buy Oil","Eat Food","Drink Medicine"]
+    
+    var itemArray : [String] = []
+    
+    let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        if let items = (defaults.array(forKey: "ToDoListArray") as? [String]){
+            itemArray = items
+        }
     }
-
+    
     // MARK:  - TableView Datasource Methods
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return itemArray.count
@@ -37,7 +43,7 @@ class TodoListViewController: UITableViewController {
         
         
         if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
-           tableView.cellForRow(at: indexPath)?.accessoryType = .none
+            tableView.cellForRow(at: indexPath)?.accessoryType = .none
         }else{
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
         }
@@ -53,13 +59,16 @@ class TodoListViewController: UITableViewController {
         let action = UIAlertAction.init(title: "Add Items", style: .default) { (action) in
             
             if textField.text != "" {
+                
                 self.itemArray.append(textField.text!)
+
+                self.defaults.setValue(self.itemArray, forKey: "ToDoListArray")
+                
                 self.tableView.reloadData()
             }
         }
         
         alert.addTextField { (alertTextField) in
-  
             alertTextField.placeholder = "Create new item"
             textField = alertTextField
         }

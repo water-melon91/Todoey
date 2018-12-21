@@ -155,7 +155,6 @@ class TodoListViewController: UITableViewController {
 
         itemArray = [Item]()
         
-        print(selectCategory?.name,"name") 
         
         let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectCategory!.name!)
         
@@ -166,7 +165,7 @@ class TodoListViewController: UITableViewController {
             request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate,addtionalPredicate])
         }else{
                 request.predicate = categoryPredicate
-        }
+        }  
         do{
             itemArray = try context.fetch(request)
             print(itemArray,"itemArray")
